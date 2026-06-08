@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card p-4 shadow">
+
+    <h3>Book Ticket</h3>
+
+    <hr>
+
+    <h5>{{ train.TRAIN_NAME }}</h5>
+
+    <p>
+        {{ train.SOURCE_STATION }}
+        →
+        {{ train.DESTINATION_STATION }}
+    </p>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="mb-3">
+
+            <label>Passenger Name</label>
+
+            <input type="text"
+                   name="passenger_name"
+                   class="form-control"
+                   required>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Passenger Age</label>
+
+            <input type="number"
+                   name="passenger_age"
+                   class="form-control"
+                   required>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Gender</label>
+
+            <select name="passenger_gender"
+                    class="form-control">
+
+                <option>Male</option>
+                <option>Female</option>
+
+            </select>
+
+        </div>
+
+        <div class="mb-3">
+
+            <label>Journey Date</label>
+
+            <input type="date"
+                   name="journey_date"
+                   class="form-control"
+                   required>
+
+        </div>
+
+        <button class="btn btn-success">
+            Confirm Booking
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}
+
+Bharat Railway
+
+
+{% endblock %}
+{% block head %}
+<style>
+   .dashboard-cards{
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dashboard-cards:hover{
+    background-color: var(--bs-primary);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25) !important;
+}
+
+.dashboard-cards:hover .card-icon{
+    color: white !important;
+}
+
+.dashboard-cards h5{
+    margin: 0;
+}
+.dashboard-cards:hover i{
+    color: white !important;
+}
+
+.dashboard-cards i{
+    color: var(--bs-primary);
+    transition: all 0.3s ease;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+    
+
+<div class="card p-4 shadow mt-2">
+
+    <h3>Welcome to Bharat Railway</h3>
+    <hr>
+
+    <!-- <a href="/search/train/" class="btn btn-primary mt-3">
+        Search Train
+    </a> -->
+    <div class="row mt-4">
+        <div class="col-4 border-0">
+            <div class="card shadow border-1 p-5 text-center rounded-3">
+                <h5>
+                    <i class="fas fa-train text-primary"></i> Total Trains - {{ total_trains }}
+                </h5>
+                
+            </div>
+
+        </div>
+        <div class="col-4 border-0">
+            <a href="/search/train/" class="text-decoraion-none">
+                <div class="card dashboard-cards shadow border-1 p-5 text-center rounded-3">
+                    <h5>
+                        <i class="fa fa-search text-primary"></i> Search Trains
+                    </h5>
+                    
+                </div>
+            </a>
+
+        </div>
+        <div class="col-4 border-0">
+            <a href="/my/bookings/" class="text-decoraion-none">
+                <div class="card dashboard-cards shadow border-1 p-5 text-center rounded-3">
+                    <h5>
+                        <i class="fa-solid fa-book text-primary"></i> My Bookings
+                    </h5>
+                    
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

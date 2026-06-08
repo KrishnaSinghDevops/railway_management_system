@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% block content %}
+
+<h3 class="mb-4">Search Train</h3>
+
+<form method="POST">
+  {% csrf_token %}
+
+  <div class="row">
+    <div class="col-md-4">
+      <input type="text" name="source" id="source" class="form-control" placeholder="Source Station" list="stationList"
+        autocomplete="off" required>
+    </div>
+
+    <div class="col-md-4">
+      <input type="text" name="destination" id="destination" class="form-control" placeholder="Destination Station"
+        list="stationList" autocomplete="off" required>
+    </div>
+    <datalist id="stationList"></datalist>
+    <div class="col-md-2">
+      <button class="btn btn-success w-100">Search</button>
+    </div>
+  </div>
+</form>
+
+<hr />
+
+<table class="table table-bordered mt-4">
+  <thead>
+    <tr>
+      <th>Train No</th>
+      <th>Train Name</th>
+      <th>Source</th>
+      <th>Destination</th>
+      <th>Seats</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for train in trains %}
+
+    <tr>
+      <td>{{ train.TRAIN_NUMBER }}</td>
+
+      <td>{{ train.TRAIN_NAME }}</td>
+
+      <td>{{ train.SOURCE_STATION }}</td>
+
+      <td>{{ train.DESTINATION_STATION }}</td>
+
+      <td>{{ train.AVAILABLE_SEATS }}</td>
+
+      <td>
+        <a href="/book/ticket/{{ train.TRAIN_ID }}/" class="btn btn-primary btn-sm">
+          Book Ticket
+        </a>
+      </td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+<script>
+
+  $(document).ready(function () {
+
+    $.ajax({
+
+      url: "/get/stations/",
+      type: "GET",
+
+      success: function (response) {
+
+        let options = "";
+
+        response.forEach(function (city) {
+
+          options += `<option value="${city}">`;
+
+        });
+
+        $("#stationList").html(options);
+
+      }
+
+    });
+
+  });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,192 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+
+Bharat Railway
+
+
+{% endblock %}
+{% block head %}
+<style>
+.nav-link{
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.nav-link:hover{
+    background-color: rgba(255,255,255,0.2);
+}
+.admin-row{
+    min-height: calc(100vh - 100px);
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container-flude">
+    <div class="row admin-row">
+        
+        <!-- left side pannal -->
+        <div class="col-2 bg-secondary text-white p-3">
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2 mt-2">
+                    <a href="/admin/user" class="nav-link text-white">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2 mt-2">
+                    <a href="javascript:void(0)" class="nav-link text-white" onclick="showUserCards()">
+                        <i class="fas fa-user"></i> User Management
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2 mt-2">
+                    <a href="#" class="nav-link text-white" onclick="showTrainCards()">
+                        <i class="fas fa-cog"></i> Train Management
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- right side pannal -->
+        <div class="col-10 p-4">
+            <div id="home_section">
+                <div class="text-center">
+                    <img src="/media/logo_r.png" width="180" class="mb-3">
+                </div>
+                <h2 class="text-center">
+                    Welcome to  Admin Panel
+                </h2>
+                <div class="text-center mt-5">
+                    <img src="/media/admin_ms.png" width="200" class="mb-3">
+                </div>
+            </div>
+            <!-- user management -->
+            <div id="user_cards" style="display: none;">
+                <div class="row">
+
+                    
+                        <div class="col-4" >
+                            <a href="/user/list" class="text-decoration-none">
+                                <div class="card shadow p-4 bg-danger text-white" >
+                                    <h3>
+                                        <i class="fas fa-user me-2"></i>Update User
+
+                                    </h3>
+                                    <p class="ms-4">Update exiting Users</p>
+
+                                </div>
+                            </a>
+
+                        </div>
+                    
+
+                    <div class="col-4">
+                        <div class="card shadow p-4 bg-success text-white">
+                            <h3>
+                                <i class="fas fa-users me-2"></i>Total User
+
+                            </h3>
+                            <p class="ms-4">Update exiting Users</p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-4">
+                        <div class="card shadow p-4 bg-warning text-white">
+                            <h3>
+                                <i class="fas fa-file me-2"></i>Users Reports
+
+                            </h3>
+                            <p class="ms-4">Download User Reports</p>
+
+                        </div>
+
+                    </div>
+                   <!-- end user management -->
+                   
+
+                </div>
+
+            </div>
+
+            <!-- Train Management -->
+            <div id="train_cards" style="display: none;">
+                <div class="row">
+
+                    
+                    <div class="col-4">
+                        <div class="card shadow p-4 bg-success text-white">
+                            <h3>
+                                <i class="fas fa-plus me-2"></i>Add New Train
+
+                            </h3>
+                            <p class="ms-4">Add a New Train</p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col-4">
+                        <div class="card shadow p-4 bg-primary text-white">
+                            <h3>
+                                <i class="fa fa-bar-chart me-2"></i>Train Tracker
+
+                            </h3>
+                            <p class="ms-4">Update, Edit, Delete exiting Trains</p>
+
+                        </div>
+
+                    </div>
+
+                    <!-- <div class="col-4">
+                        <div class="card shadow p-4">
+                            <h3>
+                                Train Reports   
+
+                            </h3>
+                            <p>Download User Reports</p>
+
+                        </div>
+
+                    </div> -->
+                   <!-- end user management -->
+                   
+
+                </div>
+
+            </div>
+            <!-- End Train Management -->
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+<script>
+
+        function showUserCards(){
+
+        document.getElementById("home_section").style.display = "none";
+        document.getElementById("train_cards").style.display = "none";
+        document.getElementById("user_cards").style.display = "block";
+
+        }
+    
+    function showTrainCards(){
+    
+        document.getElementById("home_section").style.display = "none";
+        document.getElementById("user_cards").style.display = "none";
+        document.getElementById("train_cards").style.display = "block";
+    
+    }
+    
+    </script>
+{% endblock %}

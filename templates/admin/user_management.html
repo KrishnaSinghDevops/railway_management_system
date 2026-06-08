@@ -1,0 +1,365 @@
+{% extends 'admin_base.html' %}
+
+{% block title %}
+User Management
+{% endblock %}
+
+{% block content %}
+<div class="page-content">
+    <div class="container-fluid">
+         <!-- Page-Title -->
+         <div class="row">
+             <div class="col-sm-12 col-md-12 col-lg-12">
+                 <div class="page-title-box ">
+                     <div class="row ">
+                         <div class="col-12 col-md-4 col-lg-3 ">
+                             <div class="d-flex align-items-center ">
+                                 <h5 class="page-title mb-0 mt-0" style="color: #000; ">
+                                    User Settings
+                                 </h5>
+                             </div>
+                             
+                         </div>
+                         
+                     </div><!--end row-->                                                           
+                 </div><!--end page-title-box-->
+             </div><!--end col-->
+         </div><!--end row-->
+     </div><!--end container fluid-->
+     <hr>
+
+
+<div class="container-fluid ">
+
+    <div class="row mt-4">
+        <div class="col-12">
+
+            <div class="card shadow border-0">
+                
+                <!-- <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">
+                        User Management
+                    </h4>
+                </div> -->
+
+                <div class="card-body">
+
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div id="actionbtn" class="mb-3" style="display: none;">
+
+                            <button type="button" class="btn btn-success" id="updateBtn">Update</button>
+                            <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
+
+                        </div>
+
+                        <div class="table-responsive">
+
+                            <table class="table table-bordered table-hover align-middle">
+
+                                <thead class="table-light">
+                                    <tr>
+                                        <!-- <th width="50"><input type="checkbox" id="checkAll"></th> -->
+                                        <th></th>
+                                        <th width="60">S.No</th>
+                                        <th>User ID</th>
+                                        <th>Created At</th>
+                                        <th>Full Name</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Role</th>
+                                        <th>Password</th>
+                                        
+                                        
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    {% for user in users_result %}
+
+                                    <tr id="row_{{ user.USER_ID }}">
+                                        
+                                        
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input checkid" type="checkbox" data-id="{{user.USER_ID}}">
+                                            </div>
+                                        </td>
+                                        <td>{{ forloop.counter }}</td>
+                                        
+
+                                        <td>{{ user.USER_ID }}</td>
+                                        <td>{{ user.CREATED_AT }}</td>
+                                        <td><input type="text" class="form-control form-control-sm editable-field" value="{{user.FULL_NAME}}" name="full_name" disabled></td>
+                                        <td>{{ user.USERNAME }}</td>
+                                        <td><input type="text" class="form-control form-control-sm editable-field" value="{{user.EMAIL}}" name="email" disabled></td>
+                                        <td><input type="text" class="form-control form-control-sm editable-field" value="{{user.MOBILE}}" name="mobile" disabled></td>
+                                        <!-- <td><input type="text" class="form-control form-control-sm editable-field" value="{{user.ROLE}}" name="role" disabled></td> -->
+                                        <td>
+                                            <select class="form-control form-control-sm editable-field" name="role" disabled>
+                                                <option value="Admin" {% if user.ROLE == 'Admin' %}selected{% endif %}>
+                                                    Admin
+                                                </option>
+                                        
+                                                <option value="L1" {% if user.ROLE == 'L1' %}selected{% endif %}>
+                                                    L1
+                                                </option>
+                                        
+                                                <option value="L2" {% if user.ROLE == 'L2' %}selected{% endif %}>
+                                                    L2
+                                                </option>
+                                        
+                                                <option value="L3" {% if user.ROLE == 'L3' %}selected{% endif %}>
+                                                    L3
+                                                </option>
+                                                <option value="L4" {% if user.ROLE == 'L4' %}selected{% endif %}>
+                                                    L4
+                                                </option>
+                                                <option value="L5" {% if user.ROLE == 'L5' %}selected{% endif %}>
+                                                    L3
+                                                </option>
+
+                                            </select>
+                                        
+                                        </td>
+                                        <td><input type="password" class="form-control form-control-sm editable-field" value="{{user.PASSWORD}}" name="pass" disabled></td>
+
+                                        
+
+                                       
+
+                                    </tr>
+
+                                    {% empty %}
+
+                                    <tr>
+                                        <td colspan="10" class="text-center text-danger">
+                                            No Users Found
+                                        </td>
+                                    </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+</div>
+
+{% endblock %}
+{% block script %}
+
+<script>
+let selectedRow = null;
+
+$(document).on('change','.checkid',function(){
+
+    $('.checkid').not(this).prop('checked',false);
+
+    $('.editable-field').prop('disabled',true);
+
+    if($(this).is(':checked')){
+
+        selectedRow = $(this).closest('tr');
+
+        selectedRow.find('.editable-field')
+                   .prop('disabled',false);
+
+        $('#actionbtn').show();
+
+    }
+    else{
+
+        selectedRow = null;
+
+        $('#actionbtn').hide();
+
+    }
+
+});
+
+
+
+
+</script>
+<script>
+    $('#updateBtn').click(function(e){
+       
+
+e.preventDefault();
+
+let row = selectedRow;
+
+let user_id = row.find('.checkid').data('id');
+let fullname  = row.find('[name="full_name"]').val();
+let email     = row.find('[name="email"]').val();
+let mobile    = row.find('[name="mobile"]').val();
+let role      = row.find('[name="role"]').val();
+let password = row.find('[name="pass"]').val();
+
+Swal.fire({
+    title:'Are you sure?',
+    text:'Update User Record?',
+    icon:'warning',
+    showCancelButton:true,
+    confirmButtonText:'Yes Update'
+}).then((result)=>{
+
+    if(result.isConfirmed){
+
+        $.ajax({
+            url:'/user/inline/update',
+            type:'POST',
+            data:{
+                csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val(),
+
+                USER_ID:user_id,
+                FULL_NAME:fullname,
+                ROLE:role,
+                EMAIL:email,
+                MOBILE:mobile,
+                PASSWORD:password,
+                csrfmiddlewaretoken:$('[name=csrfmiddlewaretoken]').val()
+            },
+
+            success:function(response){
+
+                if(response.status==1){
+
+                    Swal.fire(
+                        'Success',
+                        response.msg,
+                        'success'
+                    ).then(()=>{
+                        location.reload();
+                    });
+                    
+
+                    row.find('.editable-field')
+                       .prop('disabled',true);
+
+                }
+                else{
+
+                    Swal.fire(
+                        'Error',
+                        response.msg,
+                        'error'
+                    );
+
+                }
+
+            }
+
+        });
+
+    }
+
+});
+
+});
+</script>
+
+
+<script>
+$(document).on('click', '#deleteBtn', function (e) {
+
+e.preventDefault();
+
+let row = selectedRow;
+
+if (!row) {
+
+    Swal.fire(
+        'Warning',
+        'Please select a user first',
+        'warning'
+    );
+
+    return;
+}
+
+let user_id = row.find('.checkid').data('id');
+
+Swal.fire({
+    title: 'Are you sure?',
+    text: 'You want to delete this user?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: 'Yes Delete',
+    cancelButtonText: 'Cancel'
+}).then((result) => {
+
+    if (result.isConfirmed) {
+
+        $.ajax({
+            url: '/user/delete',
+            type: 'POST',
+            data: {
+                USER_ID: user_id,
+                csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+            },
+
+            success: function (response) {
+
+                if (response.status == 1) {
+
+                    Swal.fire(
+                        'Deleted!',
+                        response.msg,
+                        'success'
+                    );
+
+                    row.remove();
+
+                    selectedRow = null;
+
+                    $('#actionbtn').hide();
+
+                } else {
+
+                    Swal.fire(
+                        'Error',
+                        response.msg,
+                        'error'
+                    );
+
+                }
+
+            },
+
+            error: function () {
+
+                Swal.fire(
+                    'Error',
+                    'Something went wrong',
+                    'error'
+                );
+
+            }
+
+        });
+
+    }
+
+});
+
+});
+</script>
+{% endblock %}
