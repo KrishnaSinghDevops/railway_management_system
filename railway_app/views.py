@@ -42,61 +42,47 @@ def search_train(request):
 
 @user_required
 def book_ticket(request, train_id):
-
     train = Train.objects.get(TRAIN_ID=train_id)
-
     if request.method == 'POST':
-
         passenger_name = request.POST.get('passenger_name')
         passenger_age = request.POST.get('passenger_age')
         passenger_gender = request.POST.get('passenger_gender')
         journey_date = request.POST.get('journey_date')
-
         if train.AVAILABLE_SEATS <= 0:
-
-            messages.error(request, 'No seats available')
-
-            return redirect('search_train')
+            return JsonResponse({
+                "status": 400,
+                "message": "No Seats Available"
+            })
 
         pnr = "PNR" + str(random.randint(100000, 999999))
-
-        seat_number = "S" + str(
-            train.TOTAL_SEATS - train.AVAILABLE_SEATS + 1
-        )
+        seat_number = "S" + str(train.TOTAL_SEATS - train.AVAILABLE_SEATS + 1)
 
         Booking.objects.create(
 
             PNR_NUMBER=pnr,
             USER_ID=request.session.get('USER_ID'),
-
             TRAIN_ID=train.TRAIN_ID,
-
             JOURNEY_DATE=journey_date,
-
             PASSENGER_NAME=passenger_name,
-
             PASSENGER_AGE=passenger_age,
-
             PASSENGER_GENDER=passenger_gender,
-
             SEAT_NUMBER=seat_number,
-
             STATUS='CONFIRMED',
+            CREATED_AT=datetime.now(),
+            BOOKED_BY =  request.session.get('USERNAME')
 
-            CREATED_AT=datetime.now()
 
         )
 
         train.AVAILABLE_SEATS -= 1
         train.save()
-
         messages.success(request, f'Ticket Booked Successfully | PNR : {pnr}')
-
-        return redirect('search_train')
-
-    return render(request, 'book_ticket.html', {
-        'train': train
-    })
+        return JsonResponse({
+            "status": 200,
+            "msg": f"Ticket Booked Successfully",
+            "pnr": pnr
+        })
+    return render(request, 'book_ticket.html', {'train': train})
 @user_required
 def my_bookings(request):
 

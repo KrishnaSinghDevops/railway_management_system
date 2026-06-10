@@ -1,4 +1,5 @@
 {% extends 'admin_base.html' %}
+<!-- {% load custom_tag %} -->
 
 {% block title %}
 User Management
@@ -30,6 +31,99 @@ User Management
 
 
     <div class="container-fluid ">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="table-responsive">
+                                <div class="col-2 mb-2 justify-content-end">
+                                    {% pagination page_obj %}
+                                </div>
+                                <table class="table table-bordered table-hover align-middle">
+                                    <!-- <thead class="table-light">
+                                        <tr>
+                                            <th></th>
+                                            <th width="60">S.No</th>
+                                            <th>Train_ID</th>
+                                            <th>Train No</th>
+                                            <th>Train Name</th>
+                                            <th>Source Station</th>
+                                            <th>Destination Station</th>
+                                            <th>Departure Time</th>
+                                            <th>Arrival Time</th>
+                                            <th>Total Seats</th>
+                                            <th>Available Seat</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        {% for train in train_data %}
+                                        <tr id="row_{{ train.TRAIN_ID }}">
+                                            <td></td>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ train.TRAIN_ID }}</td>
+                                            <td>{{ train.TRAIN_NUMBER }}</td>
+                                            <td>{{ train.TRAIN_NAME }}</td>
+                                            <td>{{ train.SOURCE_STATION }}</td>
+                                            <td>{{ train.DESTINATION_STATION }}</td>
+                                            <td>{{ train.DEPARTURE_TIME }}</td>
+                                            <td>{{ train.ARRIVAL_TIME }}</td>
+                                            <td>{{ train.TOTAL_SEATS }}</td>
+                                            <td>{{ train.AVAILABLE_SEATS }}</td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody> -->
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th></th>
+                                            <th width="60">S.No</th>
+                                            {% for header in headers %}
+                                            <th>{{ header }}</th>
+                                            {% endfor %}
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+
+                                        {% for train in train_data %}
+                                        <tr>
+                                            <td></td>
+                                            <td>{{ forloop.counter }}</td>
+
+                                            {% for key, value in train.items %}
+                                            <td>{{ value }}</td>
+                                            {% endfor %}
+
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="20" class="text-center">
+                                                No Records Found
+
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+
+                            </div>
+
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
 
     </div>

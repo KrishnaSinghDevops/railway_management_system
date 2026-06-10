@@ -33,31 +33,16 @@ User Management
 
     <div class="row mt-4">
         <div class="col-12">
-
             <div class="card shadow border-0">
-                
-                <!-- <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">
-                        User Management
-                    </h4>
-                </div> -->
-
                 <div class="card-body">
-
                     <form method="post">
                         {% csrf_token %}
-
                         <div id="actionbtn" class="mb-3" style="display: none;">
-
                             <button type="button" class="btn btn-success" id="updateBtn">Update</button>
                             <button type="button" class="btn btn-danger" id="deleteBtn">Delete</button>
-
                         </div>
-
                         <div class="table-responsive">
-
                             <table class="table table-bordered table-hover align-middle">
-
                                 <thead class="table-light">
                                     <tr>
                                         <!-- <th width="50"><input type="checkbox" id="checkAll"></th> -->
@@ -119,13 +104,13 @@ User Management
                                                     L4
                                                 </option>
                                                 <option value="L5" {% if user.ROLE == 'L5' %}selected{% endif %}>
-                                                    L3
+                                                    L5
                                                 </option>
 
                                             </select>
                                         
                                         </td>
-                                        <td><input type="password" class="form-control form-control-sm editable-field" value="{{user.PASSWORD}}" name="pass" disabled></td>
+                                        <td><input type="password" class="form-control form-control-sm editable-field" value="" placeholder="*****" name="pass" required disabled></td>
 
                                         
 
@@ -211,6 +196,14 @@ let email     = row.find('[name="email"]').val();
 let mobile    = row.find('[name="mobile"]').val();
 let role      = row.find('[name="role"]').val();
 let password = row.find('[name="pass"]').val();
+if(password === ''){
+    Swal.fire(
+        'Warning',
+        'Password is required',
+        'warning'
+    );
+    return;
+}
 
 Swal.fire({
     title:'Are you sure?',

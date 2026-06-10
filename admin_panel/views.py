@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.core.paginator import Paginator
 from railway_management.decorators import admin_required
 from common.common_util import *
 from django.http import *
@@ -36,6 +36,12 @@ def user_inline_update(request):
         role = request.POST.get('ROLE')
         email = request.POST.get('EMAIL')
         password =  request.POST.get('PASSWORD')
+        
+        if not password:
+            return JsonResponse({
+                'status': 0,
+                'msg': 'Password is required'
+            })
 
 
 
@@ -99,8 +105,9 @@ def delete_user(request):
 
 
 def add_train_form(request):
-    print("User =", request.user)
-    print("Authenticated =", request.user.is_authenticated)
+    
+    print("EMAIL =", request.session.get('EMAIL'))
+    print("FULL_NAME =", request.session.get('FULL_NAME'))
     if request.method == "POST":
         response = {
             "status": 200,
@@ -137,6 +144,48 @@ def add_train_form(request):
     }
 
     return render(request, 'admin/train_management/train_form.html', context)
+
+def train_tracker(request):
+
+    print('train tracker ==========>')
+    context={}
+    query = """ SELECT TRAIN_ID, TRAIN_NUMBER, TRAIN_NAME, SOURCE_STATION, DESTINATION_STATION, DEPARTURE_TIME, 
+            ARRIVAL_TIME, TOTAL_SEATS, AVAILABLE_SEATS FROM TRAINS"""
+    print('=========> query ============>', query)
+    result = select_query(query)
+    # start pagination
+    per_page = 10
+    paginator = Paginator(result, per_page)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    # end pagination
+    print('result==============>', result)
+    if result:
+        context['headers'] = result[0].keys()
+    else:
+        context['headers'] = []
+    context['train_data'] = page_obj
+    context['page_obj'] = page_obj
+
+    sql =  """ SELECT PASSWORD FROM USERS WHERE USER_id = '2' """
+    # result_sql = select_query(decrypt_data(sql))
+    print('result_sql ============>', sql)
+    sql_result = select_query(sql)
+    print('sql_result ============>', sql_result)
+    drt = decrypt_data(sql_result[0]['PASSWORD'])
+
+    print('drt ============>', drt)
+    enc = sql_result[0]['PASSWORD']
+
+    first = decrypt_data(enc)
+    print("First:", first)
+
+    second = decrypt_data(first)
+    print("Second:", second)
+
+    return render(request, 'admin/train_management/train_tracker.html', context)
+
+
 
 
 

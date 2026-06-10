@@ -3,71 +3,41 @@
 {% block content %}
 
 <div class="card p-4 shadow">
-
-    <h3>Book Ticket</h3>
-
+    <h3><i class="fas fa-ticket"></i> Book Ticket</h3>
     <hr>
-
     <h5>{{ train.TRAIN_NAME }}</h5>
-
     <p>
         {{ train.SOURCE_STATION }}
         →
         {{ train.DESTINATION_STATION }}
     </p>
-
-    <form method="POST">
-
+    <form method="POST" id="bookingform">
         {% csrf_token %}
-
         <div class="mb-3">
-
             <label>Passenger Name</label>
-
-            <input type="text"
-                   name="passenger_name"
-                   class="form-control"
-                   required>
-
+            <input type="text" name="passenger_name" class="form-control" required>
         </div>
 
         <div class="mb-3">
 
             <label>Passenger Age</label>
-
-            <input type="number"
-                   name="passenger_age"
-                   class="form-control"
-                   required>
+            <input type="number" name="passenger_age" class="form-control" required>
 
         </div>
 
         <div class="mb-3">
-
             <label>Gender</label>
-
-            <select name="passenger_gender"
-                    class="form-control">
-
+            <select name="passenger_gender" class="form-control">
                 <option>Male</option>
                 <option>Female</option>
-
             </select>
-
         </div>
 
         <div class="mb-3">
-
             <label>Journey Date</label>
-
-            <input type="date"
-                   name="journey_date"
-                   class="form-control"
-                   required>
-
+            <input type="date" name="journey_date" class="form-control" required>
         </div>
-
-        <button class="btn btn-success">
+        <button type="submit" class="btn btn-success">
             Confirm Booking
         </button>
 
@@ -76,3 +46,110 @@
 </div>
 
 {% endblock %}
+{% block script %}
+<script>
+
+    $(document).ready(function () {
+    
+        console.log("Page Loaded");
+    
+        $("#bookingform").on("submit", function (e) {
+    
+            e.preventDefault();
+    
+            console.log("Form Submit Triggered");
+    
+            let formData = $(this).serialize();
+    
+            console.log("Serialized Data:");
+            console.log(formData);
+    
+            console.log(
+                "CSRF Token:",
+                $('[name=csrfmiddlewaretoken]').val()
+            );
+    
+            Swal.fire({
+                title: "Confirm Booking?",
+                text: "Do you want to book this ticket?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Book Now"
+            }).then((result) => {
+    
+                if (result.isConfirmed) {
+    
+                    console.log("Sending AJAX Request...");
+    
+                    $.ajax({
+                        url: window.location.href,
+                        type: "POST",
+    
+                        data: formData,
+    
+                        headers: {
+                            "X-CSRFToken": $('[name=csrfmiddlewaretoken]').val()
+                        },
+    
+                        beforeSend: function () {
+                            console.log("AJAX Started");
+                        },
+    
+                        success: function (response) {
+    
+                            console.log("Success Response:");
+                            console.log(response);
+    
+                            if (response.status == 200) {
+    
+                                Swal.fire({
+                                    icon: "success",
+                                    title: "Booking Successful",
+                                    text: response.msg + " | PNR : " + response.pnr
+                                }).then(() => {
+    
+                                    window.location.href =
+                                        "{% url 'search_train' %}";
+    
+                                });
+    
+                            } else {
+    
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Error",
+                                    text: response.message || response.msg
+                                });
+    
+                            }
+    
+                        },
+    
+                        error: function (xhr, status, error) {
+    
+                            console.log("AJAX Error");
+                            console.log("Status:", status);
+                            console.log("Error:", error);
+                            console.log("Response:", xhr.responseText);
+    
+                            Swal.fire({
+                                icon: "error",
+                                title: "Request Failed",
+                                text: "Check console for details"
+                            });
+                        }
+    
+                    });
+    
+                }
+    
+            });
+    
+        });
+    
+    });
+    
+    </script>
+
+{% endblock %}
+

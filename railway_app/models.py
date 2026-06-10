@@ -13,6 +13,7 @@ class Train(models.Model):
     ARRIVAL_TIME = models.TimeField()
     TOTAL_SEATS = models.IntegerField()
     AVAILABLE_SEATS = models.IntegerField()
+    CREATED_BY = models.CharField(max_length=200)
 
     class Meta:
         managed = False
@@ -31,6 +32,7 @@ class Booking(models.Model):
     SEAT_NUMBER = models.CharField(max_length=20)
     STATUS = models.CharField(max_length=50)
     CREATED_AT = models.DateTimeField()
+    BOOKED_BY = models.CharField(max_length=200)
 
     class Meta:
         managed = False

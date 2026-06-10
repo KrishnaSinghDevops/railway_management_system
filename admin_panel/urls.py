@@ -8,6 +8,7 @@ urlpatterns = [
     path('user/inline/update', views.user_inline_update, name="user_inline_update"),
     path('user/delete', views.delete_user, name="delete_user"),
     path('add/train', views.add_train_form, name='add_train'),
+    path('train/tracker', views.train_tracker, name='train_tracker')
 ]
     
 

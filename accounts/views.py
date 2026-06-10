@@ -62,7 +62,7 @@ def login_user(request):
         cursor = connection.cursor()
 
         query = """
-        SELECT USER_ID,USERNAME,PASSWORD,ROLE
+        SELECT USER_ID,USERNAME,PASSWORD,ROLE, FULL_NAME, EMAIL
         FROM USERS
         WHERE USERNAME=?
         """
@@ -78,16 +78,20 @@ def login_user(request):
             db_password = decrypt_data(user[2])
             print("USER DATA =", user)
             print("ROLE =", user[3])
-            print("ENTERED PASSWORD =", password)
-            print("DB PASSWORD =", db_password)
-
-            
+            # print("ENTERED PASSWORD =", password)
+            # print("DB PASSWORD =", db_password)
 
             if password == db_password:
 
                 request.session['USER_ID'] = user[0]
                 request.session['USERNAME'] = user[1]
                 request.session['ROLE'] = user[3]
+                request.session['EMAIL'] = user[5]
+                print("EMAIL SAVED =", request.session.get('EMAIL'))
+                request.session['FULL_NAME'] = user[4]
+
+                print("USER DATA =", user)
+                print("AFTER LOGIN =", dict(request.session))
 
                 role = user[3]
 

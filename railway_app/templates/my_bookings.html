@@ -7,44 +7,27 @@ My Bookings
 {% block content %}
 
 <div class="card shadow p-4">
-
     <h3 class="mb-4">My Bookings</h3>
-
     <table class="table table-bordered">
-
         <thead>
-
             <tr>
-
                 <th>PNR</th>
                 <th>Train ID</th>
                 <th>Passenger</th>
                 <th>Journey Date</th>
                 <th>Seat</th>
                 <th>Status</th>
-
             </tr>
-
         </thead>
-
         <tbody>
-
             {% for booking in bookings %}
-
             <tr>
-
                 <td>{{ booking.PNR_NUMBER }}</td>
-
                 <td>{{ booking.TRAIN_ID }}</td>
-
                 <td>{{ booking.PASSENGER_NAME }}</td>
-
                 <td>{{ booking.JOURNEY_DATE }}</td>
-
                 <td>{{ booking.SEAT_NUMBER }}</td>
-
                 <td>
-
                     <span class="badge bg-success">
                         {{ booking.STATUS }}
                     </span>
